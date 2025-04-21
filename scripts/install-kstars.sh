@@ -11,11 +11,12 @@ threads=$(($threads - 2))
 
 QT_VERSION=6
 
-REPO="https://invent.kde.org/wreissenberger/kstars.git"
+REPO="https://invent.kde.org/education/kstars.git"
+#REPO="https://invent.kde.org/wreissenberger/kstars.git"
 SRC_DIR=$HOME/sterne-jaeger/git
 PACKAGE=kstars
 BUILD_DIR=$HOME/sterne-jaeger/build/$PACKAGE
-BRANCH=framework_qt6
+BRANCH=master
 QT_VERSION=6
 
 mkdir -p $SRC_DIR
@@ -48,14 +49,17 @@ if (echo $ID | grep -q "opensuse"); then
 	     kf6-knotifyconfig-devel \
 	     kf6-ki18n-devel \
              kf6-kxmlgui-devel \
+	     kf6-knewstuff-imports \
 	     qt6-sql-devel \
              qt6-svg-devel \
-             qt6-printsupport-devel \
              qt6-websockets-devel \
              libKF6NotifyConfig6 \
              qtkeychain-qt6-devel \
              qt6-datavisualization-devel
-    else
+        sudo zypper --non-interactive install \
+	            --no-recommends --force-resolution --force \
+             qt6-printsupport-devel; \
+   else
 	# Qt5 version
 	sudo zypper --non-interactive install \
              kio-devel \
@@ -141,13 +145,13 @@ fi
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
-           -DUSE_QT5=Off \
+           -DBUILD_QT5=Off \
            $SRC_DIR/$PACKAGE; \
  else \
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
-           -DUSE_QT5=On \
+           -DBUILD_QT5=On \
            $SRC_DIR/$PACKAGE; \
  fi;
 
