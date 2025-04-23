@@ -1,18 +1,10 @@
 #!/bin/sh
 
 # read standard parameters
-. $HOME/sterne-jaeger/scripts/config.sh
+. $HOME/astro/git/kstars-scripts/scripts/config.sh
 
-QT_VERSION=6
-
-REPO="https://github.com/rlancaste/stellarsolver.git"
-SRC_DIR=$HOME/sterne-jaeger/git
-PACKAGE=stellarsolver
-BUILD_DIR=$HOME/sterne-jaeger/build/$PACKAGE
-BRANCH=master
-
-mkdir -p $SRC_DIR
-mkdir -p $BUILD_DIR
+mkdir -p $STELLARSOLVER_SRC_DIR
+mkdir -p $STELLARSOLVER_BUILD_DIR
 
 # stop after error
 set -e
@@ -33,7 +25,7 @@ if (echo $ID | grep -q "opensuse"); then
      kinit-devel \
      kf6-breeze-icons
 
-    if [ "$QT_VERSION" == "6" ]; then
+    if [ "$STELLARSOLVER_QT_VERSION" == "6" ]; then
 	# Qt6 version
 	sudo zypper --non-interactive install \
              libKF6Plotting6 \
@@ -87,7 +79,7 @@ else
 	 libsecret-1-dev \
 	 breeze-icon-theme
 
-    if [ $QT_VERSION -lt 6 ]; then
+    if [ $STELLARSOLVER_QT_VERSION -lt 6 ]; then
 	# Qt5 packages
 	sudo apt-get -y install \
 	     libqt5svg5-dev \
@@ -109,35 +101,39 @@ else
 	     libkf5notifyconfig-dev
     else
 	# Qt6 packages
-	sudo snap install kf6-core22
-	sudo apt-get -y install \
-	     qt6-base-dev \
-	     libgl1-mesa-dev \
-	     libqt6svg6-dev \
-	     libqt6websockets6-dev \
-	     qt6-declarative-dev \
-	     qtkeychain-qt6-dev \
-	     libqt6datavisualization6-dev
+	if is_raspberry_pi_os; then
+	    # Raspberry
+	    echo "Welcome Raspberry"
+	    sudo apt-get -y install snapd
+	    sudo snap install kf6-core22 kde-qt6-core22-sdk
+	else
+	    # other Debian (Ubuntu...)
+	    sudo snap install kf6-core22 kde-qt6-core22-sdk
+	fi
     fi
 fi
 
-if [ -d $SRC_DIR/$PACKAGE ]; then
-    (cd $SRC_DIR/$PACKAGE && git pull --all && git checkout $PACKAGE && git pull)
+if [ -d $STELLARSOLVER_SRC_DIR/$STELLARSOLVER_PACKAGE ]; then
+    (cd $STELLARSOLVER_SRC_DIR/$STELLARSOLVER_PACKAGE && git pull --all && git checkout $STELLARSOLVER_PACKAGE && git pull)
 else
-    (cd $SRC_DIR && git clone --branch $BRANCH $REPO)
+    (cd $STELLARSOLVER_SRC_DIR && git clone --branch $STELLARSOLVER_BRANCH $STELLARSOLVER_REPO)
 fi
 
-(cd $BUILD_DIR ;
- if [ "$QT_VERSION" == "6" ]; then
-     cmake -DCMAKE_INSTALL_PREFIX=/usr \
-       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-       -DUSE_QT5=Off \
-       $SRC_DIR/$PACKAGE
- else
+(cd $STELLARSOLVER_BUILD_DIR ;
+ if [ $STELLARSOLVER_QT_VERSION -lt 6 ]; then
+     # Qt5
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DUSE_QT5=On \
-       $SRC_DIR/$PACKAGE
+       $STELLARSOLVER_SRC_DIR/$STELLARSOLVER_PACKAGE
+ else
+     # Qt6
+     QT6CORE=/snap/kde-qt6-core22-sdk/current/usr/lib/aarch64-linux-gnu/cmake
+     cmake -DCMAKE_INSTALL_PREFIX=/usr \
+       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+       -DUSE_QT5=Off \
+       -DCMAKE_PREFIX_PATH="$QT6CORE" \
+       $STELLARSOLVER_SRC_DIR/$STELLARSOLVER_PACKAGE
  fi
 
  make -j${threads} && sudo make install)

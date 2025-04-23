@@ -4,23 +4,14 @@
 set -e
 
 # read standard parameters
-. $HOME/sterne-jaeger/scripts/config.sh
+. $HOME/astro/git/kstars-scripts/scripts/config.sh
 
 # override threads
 threads=$(($threads - 2))
 
-QT_VERSION=6
 
-REPO="https://invent.kde.org/education/kstars.git"
-#REPO="https://invent.kde.org/wreissenberger/kstars.git"
-SRC_DIR=$HOME/sterne-jaeger/git
-PACKAGE=kstars
-BUILD_DIR=$HOME/sterne-jaeger/build/$PACKAGE
-BRANCH=master
-QT_VERSION=6
-
-mkdir -p $SRC_DIR
-mkdir -p $BUILD_DIR
+mkdir -p $KSTARS_SRC_DIR
+mkdir -p $KSTARS_BUILD_DIR
 
 if (echo $ID | grep -q "opensuse"); then
     # Qt version independent packages
@@ -38,7 +29,7 @@ if (echo $ID | grep -q "opensuse"); then
          libsecret-1-0 \
          kf6-breeze-icons
 
-    if [ "$QT_VERSION" == "6" ]; then
+    if [ $KSTARS_QT_VERSION -ge 6 ]; then
 	# Qt6 version
 	sudo zypper --non-interactive install \
 	     kf6-kcrash-devel \
@@ -100,7 +91,7 @@ else
 	 libsecret-1-dev \
 	 breeze-icon-theme
 
-    if [ $QT_VERSION -lt 6 ]; then
+    if [ $KSTARS_QT_VERSION -lt 6 ]; then
 	# Qt5 packages
 	sudo apt-get -y install \
 	 libkf5plotting-dev \
@@ -120,39 +111,52 @@ else
 	 qt5keychain-dev \
 	 libqt5datavisualization5-dev
     else
+	if is_raspberry_pi_os; then
+	    # Raspberry
+	    sudo apt-get -y install \
+		 snapd \
+		 libcups2-dev
+	fi
 	if (snap list | fgrep -q kf6-core22); then
 	    sudo snap refresh
 	else
-	    sudo snap install kf6-core22 kf6-core22-sdk
+	    sudo snap install kf6-core22 kde-qt6-core22-sdk
 	fi
+
 	sudo apt-get -y install \
-	 libqt6svg6-dev \
-	 libqt6websockets6-dev \
-	 libqt6datavisualization6-dev \
-	 qtkeychain-qt6-dev
+	     libxkbcommon-dev
     fi
 fi
 
 
-if [ -d $SRC_DIR/$PACKAGE ]; then
-    (cd $SRC_DIR/$PACKAGE && git pull --all && git checkout $BRANCH && git pull)
+if [ -d $KSTARS_SRC_DIR/$KSTARS_PACKAGE ]; then
+    (cd $KSTARS_SRC_DIR/$KSTARS_PACKAGE && git pull --all && git checkout $KSTARS_BRANCH && git pull)
 else
-    (cd $SRC_DIR && git clone --branch $BRANCH $REPO)
+    (cd $KSTARS_SRC_DIR && git clone --branch $KSTARS_BRANCH $KSTARS_REPO)
 fi
 
-(cd $BUILD_DIR ;
- if [ $QT_VERSION -ge 6 ]; then \
+(cd $KSTARS_BUILD_DIR ;
+ if [ $KSTARS_QT_VERSION -ge 6 ]; then \
+     QT6CORE=/snap/kde-qt6-core22-sdk/current/usr/lib/aarch64-linux-gnu/cmake
+     KF6CORE=/snap/kf6-core22-sdk/current/usr/lib/aarch64-linux-gnu/cmake
+     QT6_SDK=/snap/kde-qt6-core22-sdk/current
+     LD_LIBRARY_PATH=$QT6_SDK/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
+     PATH=$QT6_SDK/usr/bin/qt6:$PATH
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
            -DBUILD_QT5=Off \
-           $SRC_DIR/$PACKAGE; \
+	   -DCMAKE_PREFIX_PATH="$QT6CORE:$KF6CORE" \
+	   -DQt6_DIR="$QT6CORE/Qt6" \
+	   -DQt6DataVisualization_DIR="$QT6CORE/Qt6DataVisualization" \
+	   -DQT_DEBUG_FIND_PACKAGE=ON \
+	   $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
  else \
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
            -DBUILD_QT5=On \
-           $SRC_DIR/$PACKAGE; \
+           $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
  fi;
 
- make -j${threads} $PACKAGE && sudo make install)
+ make -j${threads} $KSTARS_PACKAGE && sudo make install)

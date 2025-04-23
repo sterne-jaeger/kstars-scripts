@@ -1,17 +1,10 @@
 #!/bin/sh
 
 # read standard parameters
-. $HOME/sterne-jaeger/scripts/config.sh
+. $HOME/astro/git/kstars-scripts/scripts/config.sh
 
-REPO="https://github.com/indilib/indi.git"
-#REPO="https://github.com/sterne-jaeger/indi.git"
-SRC_DIR=$HOME/sterne-jaeger/git
-PACKAGE=indi
-BUILD_DIR=$HOME/sterne-jaeger/build/$PACKAGE
-BRANCH=v2.1.0
-
-mkdir -p $SRC_DIR
-mkdir -p $BUILD_DIR
+mkdir -p $INDI_SRC_DIR
+mkdir -p $INDI_BUILD_DIR
 
 # stop after error
 set -e
@@ -67,12 +60,12 @@ else
 	 libtheora-dev
 fi
 
-if [ -d $SRC_DIR/$PACKAGE ]; then
-    (cd $SRC_DIR/$PACKAGE && git checkout master && git pull --all && git checkout $BRANCH)
+if [ -d $INDI_SRC_DIR/$INDI_PACKAGE ]; then
+    (cd $INDI_SRC_DIR/$INDI_PACKAGE && git checkout master && git pull --all && git checkout $INDI_BRANCH)
 else
-    (cd $SRC_DIR && git clone --branch $BRANCH $REPO)
+    (cd $INDI_SRC_DIR && git clone --branch $INDI_BRANCH $INDI_REPO)
 fi
 
-(cd $BUILD_DIR ;
- cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug $SRC_DIR/indi;
+(cd $INDI_BUILD_DIR ;
+ cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug $INDI_SRC_DIR/indi;
  make -j${threads} && sudo make install)

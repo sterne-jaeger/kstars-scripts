@@ -1,17 +1,11 @@
 #!/bin/sh
 
 # read standard parameters
-. $HOME/sterne-jaeger/scripts/config.sh
+. $HOME/astro/git/kstars-scripts/scripts/config.sh
 
-REPO="https://github.com/indilib/indi-3rdparty.git"
-#REPO="https://github.com/sterne-jaeger/indi-3rdparty.git"
-PACKAGE=indi-3rdparty
-BRANCH=v2.1.3
-BUILD_DIR=$HOME/sterne-jaeger/build/$PACKAGE
-SRC_DIR=$HOME/sterne-jaeger/git
 
-mkdir -p $SRC_DIR
-mkdir -p $BUILD_DIR
+mkdir -p $INDI_3RDPARTY_SRC_DIR
+mkdir -p $INDI_3RDPARTY_BUILD_DIR
 
 # stop after error
 set -e
@@ -61,16 +55,16 @@ else
 	 libzmq3-dev
 fi
 
-if [ -d $SRC_DIR/$PACKAGE ]; then
-    (cd $SRC_DIR/$PACKAGE && git checkout master && git pull --all && git checkout $BRANCH)
+if [ -d $INDI_3RDPARTY_SRC_DIR/$INDI_3RDPARTY_PACKAGE ]; then
+    (cd $INDI_3RDPARTY_SRC_DIR/$INDI_3RDPARTY_PACKAGE && git checkout master && git pull --all && git checkout $INDI_3RDPARTY_BRANCH)
 else
-    (cd $SRC_DIR && git clone --branch $BRANCH $REPO)
+    (cd $INDI_3RDPARTY_SRC_DIR && git clone --branch $INDI_3RDPARTY_BRANCH $INDI_3RDPARTY_REPO)
 fi
 
-(cd $BUILD_DIR ;
- cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug -DWITH_GPSD=Off -DBUILD_LIBS=On $SRC_DIR/indi-3rdparty;
+(cd $INDI_3RDPARTY_BUILD_DIR ;
+ cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug -DWITH_GPSD=Off -DBUILD_LIBS=On $INDI_3RDPARTY_SRC_DIR/indi-3rdparty;
  make -j${threads} && sudo make install)
 
-(cd $BUILD_DIR ;
- cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug -DWITH_GPSD=Off -DWITH_SKYWALKER=Off -DWITH_AVALONUD=Off -DBUILD_LIBS=Off $SRC_DIR/indi-3rdparty;
+(cd $INDI_3RDPARTY_BUILD_DIR ;
+ cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug -DWITH_GPSD=Off -DWITH_SKYWALKER=Off -DWITH_AVALONUD=Off -DBUILD_LIBS=Off $INDI_3RDPARTY_SRC_DIR/indi-3rdparty;
  make -j${threads} && sudo make install )
