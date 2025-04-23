@@ -30,6 +30,13 @@ export STELLARSOLVER_BUILD_DIR=$ASTRO_HOME/build/$STELLARSOLVER_PACKAGE
 export STELLARSOLVER_BRANCH=master
 export STELLARSOLVER_QT_VERSION=$QT_VERSION
 
+#settings for PHD2
+PHD2_REPO="https://github.com/OpenPHDGuiding/phd2.git"
+PHD2_SRC_DIR=$HOME/sterne-jaeger/git
+PHD2_PACKAGE=phd2
+PHD2_BUILD_DIR=$HOME/sterne-jaeger/build/$PHD2_PACKAGE
+PHD2_BRANCH=master
+
 #setting for KStars
 export KSTARS_REPO="https://invent.kde.org/education/kstars.git"
 export KSTARS_SRC_DIR=$ASTRO_HOME/git
