@@ -10,24 +10,21 @@ mkdir -p $PHD2_SRC_DIR
 mkdir -p $PHD2_BUILD_DIR
 
 if (echo $ID | grep -q "opensuse"); then
+    # openSuSE
     sudo zypper install -y \
-	 build-essential \
 	 git \
 	 cmake \
 	 pkg-config \
-	 libwxgtk3.0-gtk3-dev \
-	 wx-common \
-	 wx3.0-i18n \
-	 libnova-dev \
+	 wxGTK3-3_2-devel \
+	 libnova-devel \
 	 gettext \
-	 zlib1g-dev \
-	 libx11-dev \
-	 libopencv-dev \
-	 libcurl4-gnutls-dev \
-	 libeigen3-dev
+	 zlib-devel \
+	 libX11-devel \
+	 opencv-devel \
+	 libcurl-devel \
+	 eigen3-devel
 else
     # Debian derivates
-    # openSuSE
     sudo apt-get install -y \
 	 build-essential \
 	 git \
