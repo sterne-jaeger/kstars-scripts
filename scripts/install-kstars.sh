@@ -145,6 +145,7 @@ fi
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
+	   -DBUILD_DOC=No \
            -DBUILD_QT5=Off \
 	   -DCMAKE_PREFIX_PATH="$QT6CORE:$KF6CORE" \
 	   -DQt6_DIR="$QT6CORE/Qt6" \
@@ -155,6 +156,7 @@ fi
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
+           -DBUILD_DOC=No \
            -DBUILD_QT5=On \
            $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
  fi;
