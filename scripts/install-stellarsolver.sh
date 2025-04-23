@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # read standard parameters
-. $HOME/astro/git/kstars-scripts/scripts/config.sh
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+. "$SCRIPT_DIR/config.sh"
 
 mkdir -p $STELLARSOLVER_SRC_DIR
 mkdir -p $STELLARSOLVER_BUILD_DIR
@@ -103,7 +104,6 @@ else
 	# Qt6 packages
 	if is_raspberry_pi_os; then
 	    # Raspberry
-	    echo "Welcome Raspberry"
 	    sudo apt-get -y install snapd
 	    sudo snap install kf6-core22 kde-qt6-core22-sdk
 	else

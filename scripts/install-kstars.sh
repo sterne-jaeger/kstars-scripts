@@ -4,7 +4,8 @@
 set -e
 
 # read standard parameters
-. $HOME/astro/git/kstars-scripts/scripts/config.sh
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+. "$SCRIPT_DIR/config.sh"
 
 # override threads
 threads=$(($threads - 2))

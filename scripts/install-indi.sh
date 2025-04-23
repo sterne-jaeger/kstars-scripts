@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # read standard parameters
-. $HOME/astro/git/kstars-scripts/scripts/config.sh
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+. "$SCRIPT_DIR/config.sh"
 
 mkdir -p $INDI_SRC_DIR
 mkdir -p $INDI_BUILD_DIR
