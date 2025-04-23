@@ -6,6 +6,7 @@ export ID
 
 # global settings
 export ASTRO_HOME=$HOME/astro
+export QT_VERSION=5
 
 # settings for INDI
 export INDI_SRC_DIR=$ASTRO_HOME/git
@@ -27,7 +28,7 @@ export STELLARSOLVER_SRC_DIR=$ASTRO_HOME/git
 export STELLARSOLVER_PACKAGE=stellarsolver
 export STELLARSOLVER_BUILD_DIR=$ASTRO_HOME/build/$STELLARSOLVER_PACKAGE
 export STELLARSOLVER_BRANCH=master
-export STELLARSOLVER_QT_VERSION=6
+export STELLARSOLVER_QT_VERSION=$QT_VERSION
 
 #setting for KStars
 export KSTARS_REPO="https://invent.kde.org/education/kstars.git"
@@ -35,7 +36,7 @@ export KSTARS_SRC_DIR=$ASTRO_HOME/git
 export KSTARS_PACKAGE=kstars
 export KSTARS_BUILD_DIR=$ASTRO_HOME/build/$KSTARS_PACKAGE
 export KSTARS_BRANCH=stable-3.7.6
-export KSTARS_QT_VERSION=6
+export KSTARS_QT_VERSION=$QT_VERSION
 
 
 is_raspberry_pi_os() {
