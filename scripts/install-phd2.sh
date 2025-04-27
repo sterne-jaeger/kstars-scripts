@@ -45,9 +45,16 @@ else
 	     libwxgtk3.2-dev \
 	     wx3.2-i18n
     else
-	sudo apt-get install -y \
-	     libwxgtk3.0-gtk3-dev \
-	     wx3.0-i18n
+	if [ "$(lsb_release -rs | cut -d. -f1)" -le 22 ]; then
+	    # Ubuntu <= 22
+	    sudo apt-get install -y \
+		 libwxgtk3.0-gtk3-dev \
+		 wx3.0-i18n
+	else
+	    sudo apt-get install -y \
+		 libwxgtk3.2-dev \
+		 wx3.2-i18n
+	fi
     fi
 fi
 

@@ -112,20 +112,39 @@ else
 	 qt5keychain-dev \
 	 libqt5datavisualization5-dev
     else
-	if is_raspberry_pi_os; then
-	    # Raspberry
-	    sudo apt-get -y install \
-		 snapd \
-		 libcups2-dev
-	fi
-	if (snap list | fgrep -q kf6-core22); then
-	    sudo snap refresh
-	else
-	    sudo snap install kf6-core22 kde-qt6-core22-sdk
-	fi
+	if [ "$(lsb_release -rs | cut -d. -f1)" -le 22 ]; then
+	    # Ubuntu version <= 22
+	    if is_raspberry_pi_os; then
+		# Raspberry
+		sudo apt-get -y install \
+		     snapd \
+		     libcups2-dev
+	    fi
+	    if (snap list | fgrep -q kf6-core22); then
+		sudo snap refresh
+	    else
+		sudo snap install kf6-core22 kde-qt6-core22-sdk
+	    fi
 
-	sudo apt-get -y install \
-	     libxkbcommon-dev
+	    sudo apt-get -y install \
+		 libxkbcommon-dev
+	else
+	    # Ubuntu >= 24
+            sudo apt install -y qt6-base-dev \
+		 qt6-svg-dev \
+		 qt6-websockets-dev \
+                 qt6-datavis3d-dev \
+		 libkf6config-dev \
+		 libkf6crash-dev \
+		 libkf6doctools-dev \
+		 libkf6widgetsaddons-dev \
+		 libkf6newstuff-dev \
+		 libkf6i18n-dev \
+		 libkf6kio-dev \
+		 libkf6xmlgui-dev \
+		 libkf6plotting-dev \
+		 libkf6notifications-dev
+	fi
     fi
 fi
 
@@ -138,19 +157,11 @@ fi
 
 (cd $KSTARS_BUILD_DIR ;
  if [ $KSTARS_QT_VERSION -ge 6 ]; then \
-     QT6CORE=/snap/kde-qt6-core22-sdk/current/usr/lib/aarch64-linux-gnu/cmake
-     KF6CORE=/snap/kf6-core22-sdk/current/usr/lib/aarch64-linux-gnu/cmake
-     QT6_SDK=/snap/kde-qt6-core22-sdk/current
-     LD_LIBRARY_PATH=$QT6_SDK/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
-     PATH=$QT6_SDK/usr/bin/qt6:$PATH
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
 	   -DBUILD_DOC=No \
            -DBUILD_QT5=Off \
-	   -DCMAKE_PREFIX_PATH="$QT6CORE:$KF6CORE" \
-	   -DQt6_DIR="$QT6CORE/Qt6" \
-	   -DQt6DataVisualization_DIR="$QT6CORE/Qt6DataVisualization" \
 	   -DQT_DEBUG_FIND_PACKAGE=ON \
 	   $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
  else \
