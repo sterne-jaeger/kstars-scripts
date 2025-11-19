@@ -161,7 +161,7 @@ fi
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
 	   -DBUILD_DOC=No \
-           -DBUILD_QT5=Off \
+           -DBUILD_WITH_QT6=On \
 	   -DQT_DEBUG_FIND_PACKAGE=ON \
 	   $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
  else \
@@ -169,7 +169,7 @@ fi
            -DCMAKE_BUILD_TYPE=Debug \
 	   -DBUILD_TESTING=No \
            -DBUILD_DOC=No \
-           -DBUILD_QT5=On \
+           -DBUILD_WITH_QT6=Off \
            $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
  fi;
 
