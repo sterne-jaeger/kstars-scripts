@@ -25,6 +25,7 @@ if (echo $ID | grep -q "opensuse"); then
 	 libftdi1-devel \
 	 libavcodec-devel \
 	 libavdevice-devel \
+	 libudev-dev \
 	 czmq-devel
 else
     sudo apt-get install -y \
@@ -52,6 +53,7 @@ else
 	 libgps-dev \
 	 libavcodec-dev \
 	 libavdevice-dev \
+	 libudev-dev \
 	 libzmq3-dev
 fi
 

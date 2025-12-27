@@ -4,20 +4,20 @@ eval `grep "^ID=" /etc/os-release`
 export ID
 
 # global settings
-ASTRO_HOME=$HOME/astro
-QT_VERSION=6
+ASTRO_HOME=$HOME/sterne-jaeger
+QT_VERSION=5
 
 # settings for INDI
 INDI_SRC_DIR=$ASTRO_HOME/git
 INDI_REPO="https://github.com/indilib/indi.git"
 INDI_PACKAGE=indi
 INDI_BUILD_DIR=$ASTRO_HOME/build/$INDI_PACKAGE
-INDI_BRANCH=v2.1.3
+INDI_BRANCH=v2.1.7
 
 # settings for INDI 3rdParty
 INDI_3RDPARTY_REPO="https://github.com/indilib/indi-3rdparty.git"
 INDI_3RDPARTY_PACKAGE=indi-3rdparty
-INDI_3RDPARTY_BRANCH=v2.1.3
+INDI_3RDPARTY_BRANCH=v2.1.7.1
 INDI_3RDPARTY_BUILD_DIR=$ASTRO_HOME/build/$INDI_3RDPARTY_PACKAGE
 INDI_3RDPARTY_SRC_DIR=$ASTRO_HOME/git
 
