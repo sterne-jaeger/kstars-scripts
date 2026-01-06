@@ -19,7 +19,7 @@ if (echo $ID | grep -q "opensuse"); then
 	 wxGTK3-3_2-devel \
 	 libnova-devel \
 	 gettext \
-	 zlib-devel \
+	 zlib-ng-compat-devel \
 	 libX11-devel \
 	 opencv-devel \
 	 libcurl-devel \
