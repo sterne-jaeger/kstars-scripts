@@ -7,7 +7,7 @@ ARG TARGET=opensuse # alternatives: ubuntu
 ENV HOME=/home/sterne-jaeger
 ENV PACKAGE=indi-3rdparty
 ENV REPO=https://github.com/indilib/indi-3rdparty.git
-ARG BRANCH=v2.1.3
+ARG BRANCH=v2.1.9
 ENV SRC_DIR=$HOME/git
 ENV BUILD_DIR=$HOME/build/$PACKAGE
 ENV threads=10
@@ -21,8 +21,6 @@ RUN case $TARGET in \
         zypper --non-interactive install libnova-devel \
             cfitsio-devel \
             libusb-1_0-devel \
-            cmake \
-            git \
             libjpeg-devel \
             libtiff-devel \
             libftdi1-devel \
@@ -32,6 +30,7 @@ RUN case $TARGET in \
             libftdi1-devel \
             libavcodec-devel \
             libavdevice-devel \
+            systemd-devel \
             czmq-devel; \
 	;; \
     ubuntu) \

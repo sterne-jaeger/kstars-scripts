@@ -6,7 +6,7 @@ FROM ${BUILD_IMAGE}
 
 ARG TARGET=opensuse # alternatives: kde, ubuntu
 ARG REPO=https://github.com/indilib/indi.git
-ARG BRANCH=v2.1.3
+ARG BRANCH=v2.1.9
 
 USER root
 
