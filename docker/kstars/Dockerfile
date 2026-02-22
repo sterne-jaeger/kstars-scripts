@@ -78,23 +78,23 @@ RUN case $TARGET in \
              qt6-printsupport-devel; \
         else \
        	zypper --non-interactive install \
-                    kio-devel \
-                    kinit-devel \
-                    kcrash-devel \
-                    kdoctools-devel \
-                    knewstuff-devel \
-                    ki18n-devel \
-                    kplotting-devel \
-                    knotifications-devel \
-                    libqt5-qtdeclarative-devel \
-                    libQt5Sql-devel \
-                    libqt5-qtsvg-devel \
-                    libQt5PrintSupport-devel \
-                    libqt5-qtwebsockets-devel \
-                    libKF5NotifyConfig5 \
-                    libQt5WebSockets5-imports \
-                    qtkeychain-qt5-devel \
-                    libQt5DataVisualization5-devel; \
+             kio-devel \
+             kinit-devel \
+             kcrash-devel \
+             kdoctools-devel \
+             knewstuff-devel \
+             ki18n-devel \
+             kplotting-devel \
+             knotifications-devel \
+             libqt5-qtdeclarative-devel \
+             libQt5Sql-devel \
+             libqt5-qtsvg-devel \
+             libQt5PrintSupport-devel \
+             libqt5-qtwebsockets-devel \
+             libKF5NotifyConfig5 \
+             libQt5WebSockets5-imports \
+             qtkeychain-qt5-devel \
+             libQt5DataVisualization5-devel; \
            fi; \
      ;; \
     ubuntu) \
@@ -120,7 +120,7 @@ RUN case $TARGET in \
 WORKDIR $BUILD_DIR
 
 #build binaries
-RUN if [ "$QT_VERSION" == "6" ]; then \
+RUN if [ "$QT_VERSION" -eq "6" ]; then \
         cmake -DCMAKE_INSTALL_PREFIX=/usr \
               -DCMAKE_BUILD_TYPE=Debug \
 	      -DBUILD_TESTING=Off \
@@ -137,24 +137,6 @@ RUN if [ "$QT_VERSION" == "6" ]; then \
     fi
 RUN make -j${threads} kstars
 RUN make install
-
-RUN if [ "$QT_VERSION" == "6" ]; then \
-        cmake -DCMAKE_INSTALL_PREFIX=/usr \
-              -DCMAKE_BUILD_TYPE=Debug \
-	      -DBUILD_TESTING=On \
-	      -DBUILD_DOC=Off \
-              -DBUILD_QT5=Off \
-              $SRC_DIR/$PACKAGE; \
-    else \
-        cmake -DCMAKE_INSTALL_PREFIX=/usr \
-              -DCMAKE_BUILD_TYPE=Debug \
-              -DBUILD_TESTING=On \
-	      -DBUILD_DOC=Off \
-              -DBUILD_QT5=On \
-              $SRC_DIR/$PACKAGE; \
-    fi
-
-RUN make -j2
 
 # install testing tools and infrastructure
 #RUN case $TARGET in \

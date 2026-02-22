@@ -59,6 +59,7 @@ RUN case $TARGET in \
             libavcodec-dev \
             libavdevice-dev \
             libzmq3-dev \
+            libudev-dev \
      ;; \
     esac
 	    
