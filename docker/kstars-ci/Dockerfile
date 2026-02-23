@@ -14,20 +14,33 @@ ENV BUILD_DIR=$HOME/build
 ENV threads=10
 
 RUN apt update && apt -y install --no-install-recommends \
-      phonon4qt6-backend-vlc \
-      qtkeychain-qt6-dev \
-      qml-module-qtquick-controls \
-      software-properties-common
-
-# PPAs
-RUN add-apt-repository ppa:mutlaqja/ppa
+      software-properties-common \
+      git
 
 # install GSC for testing
-RUN apt update && apt -y --no-install-recommends install gsc
+WORKDIR $SRC_DIR
+RUN if [ "$QT_VERSION" -ge "6" ]; then \
+       git clone --depth 1 https://git.launchpad.net/gsc; \
+    else \
+       true; \
+    fi
+
+WORKDIR $BUILD_DIR/gsc
+RUN if [ "$QT_VERSION" -ge "6" ]; then \
+       cmake -DCMAKE_INSTALL_PREFIX=/usr $SRC_DIR/gsc; \
+       make -j${threads} install; \
+    else \
+       add-apt-repository ppa:mutlaqja/ppa; \
+       apt update; \
+       apt -y --no-install-recommends install gsc; \
+    fi
 
 # packages required for kstars
 RUN if [ "$QT_VERSION" -ge "6" ]; then \
        apt -y install --no-install-recommends \
+            phonon4qt6-backend-vlc \
+            qtkeychain-qt6-dev \
+            qml-module-qtquick-controls \
             qt6-base-dev \
             qt6-declarative-dev \
             qt6-multimedia-dev \
@@ -50,19 +63,52 @@ RUN if [ "$QT_VERSION" -ge "6" ]; then \
         add-apt-repository ppa:pch/phd2; \
         apt update; \
         apt -y --no-install-recommends install \
-	    libindi1 \
-	    libindi-dev \
-	    libindi-data \
-	    indi-bin \
-	    xplanet \
-	    phd2 \
-	    libstellarsolver \
-	    libstellarsolver-dev \
-	    libcurl4-openssl-dev; \
+            gcc-multilib \
+            g++-multilib \
+            make \
+            gettext \
+            coreutils \
+            cmake \
+            extra-cmake-modules \
+            libindi1 \
+            libindi-dev \
+            libindi-data \
+            indi-bin \
+            phd2 \
+            libstellarsolver-dev \
+            libcurl4-openssl-dev \
+            libeigen3-dev \
+            libcfitsio-dev \
+            zlib1g-dev \
+            libindi-dev \
+            kinit-dev \
+            gettext \
+            libnova-dev \
+            libgsl-dev \
+            libraw-dev \
+            wcslib-dev \
+            libsecret-1-dev \
+            breeze-icon-theme; \
     fi
 
-RUN apt-get update && (apt-get purge -y qtchooser || true) && \
-    ln -sf /usr/bin/qtpaths6 /usr/bin/qtpaths
+# install Qt5
+RUN if [ "$QT_VERSION" -lt "6" ]; then \
+        apt -y install \
+            libkf5plotting-dev \
+            libqt5svg5-dev \
+            libkf5xmlgui-dev \
+            libkf5kio-dev \
+            kinit-dev \
+            libkf5newstuff-dev \
+            libkf5doctools-dev \
+            libkf5notifications-dev \
+            qtdeclarative5-dev \
+            libkf5crash-dev \
+            libkf5notifyconfig-dev \
+            libqt5websockets5-dev \
+            qt5keychain-dev \
+            libqt5datavisualization5-dev; \
+    fi
 
 ENV TZ=Greenwich
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -106,5 +152,9 @@ ADD http://data.astrometry.net/4200/index-4210.fits /root/.local/share/kstars/as
 # From https://invent.kde.org/sysadmin/ci-tooling/-/blob/master/system-images/suse-qt615/Dockerfile
 RUN apt update && apt -y install dbus
 RUN dbus-uuidgen > /etc/machine-id
+
+# clean up
+RUN rm -rf $HOME
+WORKDIR $HOME
 
 CMD /bin/bash
