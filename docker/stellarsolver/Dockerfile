@@ -36,7 +36,7 @@ RUN case $TARGET in \
             kf6-breeze-icons; \
 	;; \
     ubuntu) \
-        apt-get -y install build-essential \
+        apt-get -y install --no-install-recommends build-essential \
            cmake \
            git \
            libeigen3-dev \
@@ -91,15 +91,14 @@ RUN case $TARGET in \
             fi; \
 	;; \
     ubuntu) \
-       if [ "$QT_VERSION" == "6" ]; then \
-               snap install kf6-core22; \
-               apt-get -y install qt6-base-dev \
+       if [ "$QT_VERSION" -ge "6" ]; then \
+               apt-get -y install --no-install-recommends qt6-base-dev \
                     libgl1-mesa-dev \
                     libqt6svg6-dev \
                     libqt6websockets6-dev \
                     qt6-declarative-dev \
                     qtkeychain-qt6-dev \
-                    libqt6datavisualization6-dev; \
+                    qt6-datavis3d-dev; \
            else \
                apt-get -y install libqt5svg5-dev \
                     libqt5websockets5-dev \
@@ -123,7 +122,7 @@ RUN case $TARGET in \
 WORKDIR $BUILD_DIR
 
 #build drivers
-RUN if [ "$QT_VERSION" == "6" ]; then \
+RUN if [ "$QT_VERSION" -ge "6" ]; then \
         cmake -DCMAKE_INSTALL_PREFIX=/usr \
               -DCMAKE_BUILD_TYPE=RelWithDebInfo \
               -DUSE_QT5=Off \
