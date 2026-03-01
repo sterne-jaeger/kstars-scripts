@@ -115,6 +115,7 @@ else
     # Ubuntu >= 24
         sudo apt install -y qt6-base-dev \
              qt6-svg-dev \
+	     qt6-svg-plugins \
              qt6-websockets-dev \
              qt6-datavis3d-dev \
              libkf6config-dev \
