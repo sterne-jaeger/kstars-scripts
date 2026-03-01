@@ -31,29 +31,29 @@ if (echo $ID | grep -q "opensuse"); then
          kf6-breeze-icons
 
     if [ $KSTARS_QT_VERSION -ge 6 ]; then
-	# Qt6 version
-	sudo zypper --non-interactive install \
-	     kf6-kcrash-devel \
-	     kf6-knewstuff-devel \
-	     kf6-kdoctools-devel \
-	     kf6-kplotting-devel \
-	     kf6-knotifications-devel \
-	     kf6-knotifyconfig-devel \
-	     kf6-ki18n-devel \
-             kf6-kxmlgui-devel \
-	     kf6-knewstuff-imports \
-	     qt6-sql-devel \
-             qt6-svg-devel \
-             qt6-websockets-devel \
-             libKF6NotifyConfig6 \
-             qtkeychain-qt6-devel \
-             qt6-datavisualization-devel
+    # Qt6 version
+       sudo zypper --non-interactive install \
+            kf6-kcrash-devel \
+            kf6-knewstuff-devel \
+            kf6-kdoctools-devel \
+            kf6-kplotting-devel \
+            kf6-knotifications-devel \
+            kf6-knotifyconfig-devel \
+            kf6-ki18n-devel \
+            kf6-kxmlgui-devel \
+            kf6-knewstuff-imports \
+            qt6-sql-devel \
+            qt6-svg-devel \
+            qt6-websockets-devel \
+            libKF6NotifyConfig6 \
+            qtkeychain-qt6-devel \
+            qt6-datavisualization-devel
         sudo zypper --non-interactive install \
-	            --no-recommends --force-resolution --force \
+             --no-recommends --force-resolution --force \
              qt6-printsupport-devel; \
    else
-	# Qt5 version
-	sudo zypper --non-interactive install \
+    # Qt5 version
+    sudo zypper --non-interactive install \
              kio-devel \
              kinit-devel \
              kcrash-devel \
@@ -75,76 +75,58 @@ if (echo $ID | grep -q "opensuse"); then
 else
     # Qt independent packages
     sudo apt-get -y install \
-	 build-essential \
-	 cmake \
-	 git \
-	 libeigen3-dev \
-	 libcfitsio-dev \
-	 zlib1g-dev \
-	 extra-cmake-modules \
-	 gettext \
-	 libnova-dev \
-	 libgsl-dev \
-	 libraw-dev \
-	 wcslib-dev \
-	 xplanet \
-	 xplanet-images \
-	 libsecret-1-dev \
-	 breeze-icon-theme
+         build-essential \
+         cmake \
+         git \
+         libeigen3-dev \
+         libcfitsio-dev \
+         zlib1g-dev \
+         extra-cmake-modules \
+         gettext \
+         libnova-dev \
+         libgsl-dev \
+         libraw-dev \
+         wcslib-dev \
+         xplanet \
+         xplanet-images \
+         libsecret-1-dev \
+         breeze-icon-theme
 
     if [ $KSTARS_QT_VERSION -lt 6 ]; then
-	# Qt5 packages
-	sudo apt-get -y install \
-	 libkf5plotting-dev \
-	 libkf5xmlgui-dev \
-	 libkf5kio-dev \
-	 kinit-dev \
-	 libkf5newstuff-dev \
-	 libkf5doctools-dev \
-	 libkf5notifications-dev \
-	 libkf5crash-dev \
-	 libkf5notifyconfig-dev
+        # Qt5 packages
+        sudo apt-get -y install \
+             libkf5plotting-dev \
+             libkf5xmlgui-dev \
+             libkf5kio-dev \
+             kinit-dev \
+             libkf5newstuff-dev \
+             libkf5doctools-dev \
+             libkf5notifications-dev \
+             libkf5crash-dev \
+             libkf5notifyconfig-dev
 
-	sudo apt-get -y install \
-	 libqt5svg5-dev \
-	 qtdeclarative5-dev \
-	 libqt5websockets5-dev \
-	 qt5keychain-dev \
-	 libqt5datavisualization5-dev
+        sudo apt-get -y install \
+             libqt5svg5-dev \
+             qtdeclarative5-dev \
+             libqt5websockets5-dev \
+             qt5keychain-dev \
+             libqt5datavisualization5-dev
     else
-	if [ "$(lsb_release -rs | cut -d. -f1)" -le 22 ]; then
-	    # Ubuntu version <= 22
-	    if is_raspberry_pi_os; then
-		# Raspberry
-		sudo apt-get -y install \
-		     snapd \
-		     libcups2-dev
-	    fi
-	    if (snap list | fgrep -q kf6-core22); then
-		sudo snap refresh
-	    else
-		sudo snap install kf6-core22 kde-qt6-core22-sdk
-	    fi
-
-	    sudo apt-get -y install \
-		 libxkbcommon-dev
-	else
-	    # Ubuntu >= 24
-            sudo apt install -y qt6-base-dev \
-		 qt6-svg-dev \
-		 qt6-websockets-dev \
-                 qt6-datavis3d-dev \
-		 libkf6config-dev \
-		 libkf6crash-dev \
-		 libkf6doctools-dev \
-		 libkf6widgetsaddons-dev \
-		 libkf6newstuff-dev \
-		 libkf6i18n-dev \
-		 libkf6kio-dev \
-		 libkf6xmlgui-dev \
-		 libkf6plotting-dev \
-		 libkf6notifications-dev
-	fi
+    # Ubuntu >= 24
+        sudo apt install -y qt6-base-dev \
+             qt6-svg-dev \
+             qt6-websockets-dev \
+             qt6-datavis3d-dev \
+             libkf6config-dev \
+             libkf6crash-dev \
+             libkf6doctools-dev \
+             libkf6widgetsaddons-dev \
+             libkf6newstuff-dev \
+             libkf6i18n-dev \
+             libkf6kio-dev \
+             libkf6xmlgui-dev \
+             libkf6plotting-dev \
+             libkf6notifications-dev
     fi
 fi
 
@@ -159,15 +141,15 @@ fi
  if [ $KSTARS_QT_VERSION -ge 6 ]; then \
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
-	   -DBUILD_TESTING=No \
-	   -DBUILD_DOC=No \
+           -DBUILD_TESTING=No \
+            -DBUILD_DOC=No \
            -DBUILD_WITH_QT6=On \
-	   -DQT_DEBUG_FIND_PACKAGE=ON \
-	   $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
+           -DQT_DEBUG_FIND_PACKAGE=ON \
+       $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \
  else \
      cmake -DCMAKE_INSTALL_PREFIX=/usr \
            -DCMAKE_BUILD_TYPE=Debug \
-	   -DBUILD_TESTING=No \
+           -DBUILD_TESTING=No \
            -DBUILD_DOC=No \
            -DBUILD_WITH_QT6=Off \
            $KSTARS_SRC_DIR/$KSTARS_PACKAGE; \

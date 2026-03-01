@@ -101,27 +101,14 @@ else
 	     libkf5crash-dev \
 	     libkf5notifyconfig-dev
     else
-	if [ "$(lsb_release -rs | cut -d. -f1)" -le 22 ]; then
-	    # Ubuntu version <= 22
-	    # Qt6 snap packages
-	    if is_raspberry_pi_os; then
-		# Raspberry
-		sudo apt-get -y install snapd
-		sudo snap install kf6-core22 kde-qt6-core22-sdk
-	    else
-		# other Debian (Ubuntu...)
-		sudo snap install kf6-core22 kde-qt6-core22-sdk
-	    fi
-	else
-	    # Ubuntu >= 24
-               sudo apt -y install qt6-base-dev \
-                    libgl1-mesa-dev \
-                    qt6-svg-dev \
-                    qt6-websockets-dev \
-                    qt6-declarative-dev \
-                    qtkeychain-qt6-dev \
-                    qt6-datavis3d-dev
-	fi
+       # Ubuntu >= 24
+       sudo apt -y install qt6-base-dev \
+            libgl1-mesa-dev \
+            qt6-svg-dev \
+            qt6-websockets-dev \
+            qt6-declarative-dev \
+            qtkeychain-qt6-dev \
+            qt6-datavis3d-dev
     fi
 fi
 
