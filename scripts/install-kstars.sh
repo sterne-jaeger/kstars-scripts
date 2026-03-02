@@ -118,6 +118,7 @@ else
 	     qt6-svg-plugins \
              qt6-websockets-dev \
              qt6-datavis3d-dev \
+	     qtkeychain-qt6-dev \
              libkf6config-dev \
              libkf6crash-dev \
              libkf6doctools-dev \
