@@ -19,21 +19,11 @@ RUN apt update && apt -y install --no-install-recommends \
 
 # install GSC for testing
 WORKDIR $SRC_DIR
-RUN if [ "$QT_VERSION" -ge "6" ]; then \
-       git clone --depth 1 https://git.launchpad.net/gsc; \
-    else \
-       true; \
-    fi
+RUN git clone --depth 1 https://git.launchpad.net/gsc
 
 WORKDIR $BUILD_DIR/gsc
-RUN if [ "$QT_VERSION" -ge "6" ]; then \
-       cmake -DCMAKE_INSTALL_PREFIX=/usr $SRC_DIR/gsc; \
-       make -j${threads} install; \
-    else \
-       add-apt-repository ppa:mutlaqja/ppa; \
-       apt update; \
-       apt -y --no-install-recommends install gsc; \
-    fi
+RUN cmake -DCMAKE_INSTALL_PREFIX=/usr $SRC_DIR/gsc; \
+    make -j${threads} install
 
 # packages required for kstars
 RUN if [ "$QT_VERSION" -ge "6" ]; then \
@@ -60,7 +50,7 @@ RUN if [ "$QT_VERSION" -ge "6" ]; then \
             libkf6notifyconfig-dev \
             libqt6sql6-sqlite; \
     else \
-        add-apt-repository ppa:pch/phd2; \
+        # add-apt-repository ppa:pch/phd2; \
         apt update; \
         apt -y --no-install-recommends install \
             gcc-multilib \
@@ -70,17 +60,16 @@ RUN if [ "$QT_VERSION" -ge "6" ]; then \
             coreutils \
             cmake \
             extra-cmake-modules \
-            libindi1 \
-            libindi-dev \
-            libindi-data \
-            indi-bin \
-            phd2 \
-            libstellarsolver-dev \
+            # libindi1 \
+            # libindi-dev \
+            # libindi-data \
+            # indi-bin \
+            # phd2 \
+            # libstellarsolver-dev \
             libcurl4-openssl-dev \
             libeigen3-dev \
             libcfitsio-dev \
             zlib1g-dev \
-            libindi-dev \
             kinit-dev \
             gettext \
             libnova-dev \
