@@ -21,5 +21,7 @@ RUN mkdir -p "$HOME/bin"
 COPY build-stellarsolver.sh "$HOME/bin/build-stellarsolver.sh"
 COPY install-stellarsolver.sh "$HOME/bin/install-stellarsolver.sh"
 
-RUN chmod +x "$HOME/bin/build-stellarsolver.sh" "$HOME/bin/install-stellarsolver.sh"
-RUN "$HOME/bin/install-stellarsolver.sh"
+RUN chmod +x \
+       "$HOME/bin/build-stellarsolver.sh" \
+       "$HOME/bin/install-stellarsolver.sh" \
+ && "$HOME/bin/install-stellarsolver.sh"
