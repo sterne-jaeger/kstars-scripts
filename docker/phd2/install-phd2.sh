@@ -43,7 +43,7 @@ install_phd2_if_needed() {
         echo "No suitable apt package found, building PHD2 from source"
     fi
 
-    "$BIN_DIR/build-phd.sh"
+    "$BIN_DIR/build-phd2.sh"
 }
 
 install_phd2_if_needed

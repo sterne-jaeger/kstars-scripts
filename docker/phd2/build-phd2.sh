@@ -10,7 +10,7 @@ cd "$SRC_DIR"
 git clone --branch "$BRANCH" --depth 1 "$REPO" "$PACKAGE"
 
 cd "$SRC_DIR/$PACKAGE"
-patch -p1 < /tmp/cmake-minimum.patch
+patch -p1 < /tmp/phd2-cmake-minimum.patch
 
 # Install base packages for PHD2
 case "$TARGET" in
